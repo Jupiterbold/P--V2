@@ -1,8 +1,8 @@
 {
-  "name": "Hasi-Ai",
+  "name": "Platinum-v2",
   "description": "Javascript WhatsApp bot made by Haseeb Rashid",
   "logo": "https://files.catbox.moe/rpmxu9.jpg",
-  "keywords": ["bot,hasiai,Hasi-AI,HASI-AI,HASIAI"],
+  "keywords": ["bot,hasiai,Platinum-v2,Platinum-v2,HASIAI"],
   "success_url": "/",
 
   "env": {
