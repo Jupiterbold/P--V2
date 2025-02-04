@@ -1,8 +1,8 @@
 {
   "name": "Platinum-v2",
-  "description": "Javascript WhatsApp bot made by Haseeb Rashid",
+  "description": "Javascript WhatsApp bot made by Jupiterbold",
   "logo": "https://files.catbox.moe/rpmxu9.jpg",
-  "keywords": ["bot,hasiai,Platinum-v2,Platinum-v2,HASIAI"],
+  "keywords": ["bot,platinum-v2,Platinum-v2,Platinum-v2,PLATINUM-V2"],
   "success_url": "/",
 
   "env": {
@@ -12,7 +12,7 @@
     },  
 
     "ALIVE_IMG": {
-      "description": "https://files.catbox.moe/rpmxu9.jpg",
+      "description": "https://i.imgur.com/74NG4nf.jpeg",
       "required": true
     },
     
