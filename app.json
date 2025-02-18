@@ -30,6 +30,12 @@
       "value": "put your number here"
     },
 
+    "OWNER_NAME": {
+      "description": "Set the owner's  name.",
+      "required": true,
+      "value": "put your name here"
+    },
+  
     "MODE": {
       "description": "Set the bot mode (public/private).",
       "required": true,
