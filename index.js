@@ -86,42 +86,19 @@ conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://teleg
 })
 conn.ev.on('creds.update', saveCreds)  
 
-conn.ev.on('messages.upsert', async(mek) => {
-    mek = mek.messages[0]
+conn.ev.on('messages.upsert', async (mek) => {
+    mek = mek.messages[0];
     if (mek.key && mek.key.remoteJid === "status@broadcast") {
-    try {
-        // Auto view status
-        if (config.AUTO_VIEW_STATUS === "true" && mek.key) {
-            await conn.readMessages([mek.key]);
-        }
-
-        // Auto like status
-        if (config.AUTO_LIKE_STATUS === "true") {
-            const customEmoji = config.AUTO_LIKE_EMOJI || '💜';
-            if (mek.key.remoteJid && mek.key.participant) {
-                await conn.sendMessage(
-                    mek.key.remoteJid,
-                    { react: { key: mek.key, text: customEmoji } },
-                    { statusJidList: [mek.key.participant] }
-                );
+        try {
+            // Auto view status
+            if (config.AUTO_READ_STATUS === "true" && mek.key) {
+                await conn.readMessages([mek.key]);
             }
+        } catch (error) {
+            console.error("Error processing status actions:", error);
         }
-    } catch (error) {
-        console.error("Error processing status actions:", error);
-    }
-}
-
-conn.ev.on('call', async (call) => {
-    const callData = call[0]; // Get the first call object
-    if (callData.status === 'offer' && config.ANTICALL === "true") {
-        await conn.sendMessage(callData.from, {
-            text: config.ANTICALL_MSG,
-            mentions: [callData.from],
-        });
-        await conn.rejectCall(callData.id, callData.from);
     }
 });
-
 
 const m = sms(conn, mek)
 const type = getContentType(mek.message)
