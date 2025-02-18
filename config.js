@@ -9,7 +9,8 @@ module.exports = {
     ALIVE_IMG: process.env.ALIVE_IMG || "https://i.imgur.com/74NG4nf.jpeg",
     ALIVE_MSG: process.env.ALIVE_MSG || "Hey there, I'm alive",
     OWNER_NUMBER: process.env.OWNER_NUMBER || "your number",
-    MODE: process.env.MODE || "private",
+    MODE: process.env.MODE || "public",
     PREFIX: process.env.PREFIX || ".",
     AUTO_READ_STATUS: process.env.AUTO_READ_STATUS || "false",
+    OWNER_NAME: process.env.OWNER_NAME || "your name",
 };
