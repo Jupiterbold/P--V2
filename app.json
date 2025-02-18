@@ -9,7 +9,7 @@
     "SESSION_ID": {
       "description": "Put the session-id here.",
       "required": true,
-      "value": "put session id here"
+      "value": "U5JQRKyB#A8S7kY546gzSV18r9MKN07Zzz-7DtgE698zhJUYE8lE"
     },
 
     "ALIVE_IMG": {
@@ -27,19 +27,19 @@
     "OWNER_NUMBER": {
       "description": "Set the owner's phone number.",
       "required": true,
-      "value": "put your number here"
+      "value": "2348084644182"
     },
 
     "OWNER_NAME": {
       "description": "Set the owner's  name.",
       "required": true,
-      "value": "put your name here"
+      "value": "eleven00¹"
     },
   
     "MODE": {
       "description": "Set the bot mode (public/private).",
       "required": true,
-      "value": "public"
+      "value": "private"
     },
 
     "PREFIX": {
