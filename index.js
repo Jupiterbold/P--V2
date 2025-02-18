@@ -78,27 +78,50 @@ fs.readdirSync("./lib/plugins/").forEach((plugin) => {
 });
 console.log('Plugins installed successful ✅')
 console.log('Bot connected to whatsapp ✅')
-        let up = `Platinum-v2 is connected successfully ✅\n\nPREFIX: ${prefix}`;
+        let up =
+        `Platinum-v2 connected successfully ✅\n\nPREFIX: ${prefix}`;
 
-conn.sendMessage(ownerNumber + "@s.whatsapp.net", { image: { url: `https://telegra.ph/file/900435c6d3157c98c3c88.jpg` }, caption: up })
-
+conn.sendMessage(`${ownerNumber}@s.whatsapp.net`, { text: up });
 }
 })
 conn.ev.on('creds.update', saveCreds)  
 
-conn.ev.on('messages.upsert', async (mek) => {
-    mek = mek.messages[0];
+conn.ev.on('messages.upsert', async(mek) => {
+    mek = mek.messages[0]
     if (mek.key && mek.key.remoteJid === "status@broadcast") {
-        try {
-            // Auto view status
-            if (config.AUTO_READ_STATUS === "true" && mek.key) {
-                await conn.readMessages([mek.key]);
-            }
-        } catch (error) {
-            console.error("Error processing status actions:", error);
+    try {
+        // Auto view status
+        if (config.AUTO_READ_STATUS === "true" && mek.key) {
+            await conn.readMessages([mek.key]);
         }
+
+        // Auto like status
+        if (config.AUTO_LIKE_STATUS === "true") {
+            const customEmoji = config.AUTO_LIKE_EMOJI || '💜';
+            if (mek.key.remoteJid && mek.key.participant) {
+                await conn.sendMessage(
+                    mek.key.remoteJid,
+                    { react: { key: mek.key, text: customEmoji } },
+                    { statusJidList: [mek.key.participant] }
+                );
+            }
+        }
+    } catch (error) {
+        console.error("Error processing status actions:", error);
+    }
+}
+
+conn.ev.on('call', async (call) => {
+    const callData = call[0]; // Get the first call object
+    if (callData.status === 'offer' && config.ANTICALL === "true") {
+        await conn.sendMessage(callData.from, {
+            text: config.ANTICALL_MSG,
+            mentions: [callData.from],
+        });
+        await conn.rejectCall(callData.id, callData.from);
     }
 });
+
 
 const m = sms(conn, mek)
 const type = getContentType(mek.message)
