@@ -2,30 +2,58 @@
   "name": "Platinum-v2",
   "description": "Javascript WhatsApp bot made by Jupiterbold",
   "logo": "https://i.imgur.com/74NG4nf.jpeg",
-  "keywords": ["bot,platinum-v2,Platinum-V2,Platinum-v2,PLATINUM-V2"],
+  "keywords": ["bot", "platinum-v2", "Platinum-V2", "Platinum-v2", "PLATINUM-V2"],
   "success_url": "/",
 
   "env": {
     "SESSION_ID": {
       "description": "Put the session-id here.",
-      "required": true
-    },  
+      "required": true,
+      "value": "put session id here"
+    },
 
     "ALIVE_IMG": {
-      "description": "https://i.imgur.com/74NG4nf.jpeg",
-      "required": true
+      "description": "Set an image URL for the alive message.",
+      "required": false,
+      "value": "https://i.imgur.com/74NG4nf.jpeg"
     },
-    
-    "ALIVE_MSG": {
-      "description": "Hey pookie Pʟᴀᴛɪɴᴜᴍ-V2 is alive 🎀.",
-      "required": true
-    }   
-},
 
-     "buildpacks": [
-        {
-            "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
-        }
-     ],
+    "ALIVE_MSG": {
+      "description": "Set a custom alive message.",
+      "required": false,
+      "value": "Hey pookie Pʟᴀᴛɪɴᴜᴍ-V2 is alive 🎀."
+    },
+
+    "OWNER_NUMBER": {
+      "description": "Set the owner's phone number.",
+      "required": true,
+      "value": "put your number here"
+    },
+
+    "MODE": {
+      "description": "Set the bot mode (public/private).",
+      "required": true,
+      "value": "public"
+    },
+
+    "PREFIX": {
+      "description": "Set the command prefix.",
+      "required": true,
+      "value": "."
+    },
+
+    "AUTO_READ_STATUS": {
+      "description": "Enable or disable auto-read status (true/false).",
+      "required": true,
+      "value": "false"
+    }
+  },
+
+  "buildpacks": [
+    {
+      "url": "https://github.com/heroku/heroku-buildpack-nodejs.git"
+    }
+  ],
+  
   "stack": "heroku-24"
 }
