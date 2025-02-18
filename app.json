@@ -39,7 +39,7 @@
     "MODE": {
       "description": "Set the bot mode (public/private).",
       "required": true,
-      "value": "private"
+      "value": "public"
     },
 
     "PREFIX": {
