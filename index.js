@@ -72,10 +72,10 @@ connectToWA()
 } else if (connection === 'open') {
 console.log('😼 Installing plugins...!')
 const path = require('path');
-fs.readdirSync("./plugins/").forEach((plugin) => {
-if (path.extname(plugin).toLowerCase() == ".js") {
-require("./plugins/" + plugin);
-}
+fs.readdirSync("./lib/plugins/").forEach((plugin) => {
+    if (path.extname(plugin).toLowerCase() === ".js") {
+        require("./lib/plugins/" + plugin);
+    }
 });
 console.log('Plugins installed successful ✅')
 console.log('Bot connected to whatsapp ✅')
