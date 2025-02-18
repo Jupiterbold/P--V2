@@ -27,7 +27,6 @@ const { File } = require('megajs');
 const prefix = config.PREFIX;
 const mode = config.MODE || "private";
 const ownerNumber = [config.OWNER_NUMBER];
-const ffmpeg = require('fluent-ffmpeg');
 
 
 //===================SESSION-AUTH============================
@@ -45,7 +44,7 @@ if (!fs.existsSync(__dirname + '/auth_info_baileys/creds.json')) {
 
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 4000;
 
 //=============================================
 
