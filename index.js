@@ -4,7 +4,8 @@
 //  @project_name : PLANTINIUM_V2  
 //  @author       : efeurhobo bullish
 //  ⚠️ DO NOT MODIFY THIS FILE ⚠️  
-//---------------------------------------------------------------------------
+//---------------------------------------------------------------------------        console.error("Error processing status actions:", error);
+
 const {
   default: makeWASocket,
   useMultiFileAuthState,
@@ -15,41 +16,41 @@ const {
   Browsers
 } = require('@whiskeysockets/baileys');
 
-const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson } = require('./lib/Functions/function');
+const { getBuffer, getGroupAdmins, getRandom, h2k, isUrl, Json, runtime, sleep, fetchJson } = require('./lib/functions/function');
 const fs = require('fs');
 const P = require('pino');
 const config = require('./config');
 const qrcode = require('qrcode-terminal');
 const util = require('util');
-const { sms, downloadMediaMessage } = require('./lib/Functions/msg');
+const { sms, downloadMediaMessage } = require('./libfunctions/msg');
 const axios = require('axios');
 const { File } = require('megajs');
 const prefix = config.PREFIX;
 const mode = config.MODE || "private";
-const ownerNumber = [config.OWNER_NUMBER];
 
+const ownerNumber = [config.OWNER_NUMBER];
 
 //===================SESSION-AUTH============================
 if (!fs.existsSync(__dirname + '/auth_info_baileys/creds.json')) {
-  if(!config.SESSION_ID) return console.log('Add your session to SESSION_ID in config.js !!');
+  if(!config.SESSION_ID) return console.log('Please add your session to SESSION_ID env !!');
   const sessdata = config.SESSION_ID;
   const filer = File.fromURL(`https://mega.nz/file/${sessdata}`);
   filer.download((err, data) => {
       if(err) throw err;
       fs.writeFile(__dirname + '/auth_info_baileys/creds.json', data, () => {
-          console.log("");
+          console.log("Checking Session ID ⏳");
       });
   });
 }
 
 const express = require("express");
 const app = express();
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 8000;
 
 //=============================================
 
 async function connectToWA() {
-  console.log("Session downloaded ✅!");
+  console.log("Connecting Bot To WhatsApp 🤖");
   const { state, saveCreds } = await useMultiFileAuthState(__dirname + '/auth_info_baileys/');
   var { version } = await fetchLatestBaileysVersion();
 
@@ -69,60 +70,34 @@ if (lastDisconnect.error.output.statusCode !== DisconnectReason.loggedOut) {
 connectToWA()
 }
 } else if (connection === 'open') {
-console.log('😼 Installing plugins...!')
+console.log('Whatsapp Login Successfully ✅')
 const path = require('path');
-fs.readdirSync("./lib/plugins/").forEach((plugin) => {
-    if (path.extname(plugin).toLowerCase() === ".js") {
-        require("./lib/plugins/" + plugin);
-    }
+fs.readdirSync("./plugins/").forEach((plugin) => {
+if (path.extname(plugin).toLowerCase() == ".js") {
+require("./plugins/" + plugin);
+}
 });
-console.log('Plugins installed successful ✅')
+console.log('Plugins installed successful 🔁')
 console.log('Bot connected to whatsapp ✅')
-        let up =
-        `Platinum-v2 connected successfully ✅\n\nPREFIX: ${prefix}`;
 
-conn.sendMessage(`${ownerNumber}@s.whatsapp.net`, { text: up });
+        let up = `
+╭──〈 PLANTINIUM_V2 CONNECTED 〉────
+│▸ Prefix: [${prefix}]
+│▸ Mode: ${mode}
+╰────────────────*`;
+
+    conn.sendMessage(`${ownerNumber}@s.whatsapp.net`, { caption: up });
 }
 })
 conn.ev.on('creds.update', saveCreds)  
 
 conn.ev.on('messages.upsert', async(mek) => {
-    mek = mek.messages[0]
-    if (mek.key && mek.key.remoteJid === "status@broadcast") {
-    try {
-        // Auto view status
-        if (config.AUTO_READ_STATUS === "true" && mek.key) {
-            await conn.readMessages([mek.key]);
-        }
-
-        // Auto like status
-        if (config.AUTO_LIKE_STATUS === "true") {
-            const customEmoji = config.AUTO_LIKE_EMOJI || '💜';
-            if (mek.key.remoteJid && mek.key.participant) {
-                await conn.sendMessage(
-                    mek.key.remoteJid,
-                    { react: { key: mek.key, text: customEmoji } },
-                    { statusJidList: [mek.key.participant] }
-                );
-            }
-        }
-    } catch (error) {
-        console.error("Error processing status actions:", error);
-    }
+mek = mek.messages[0]
+if (!mek.message) return	
+mek.message = (getContentType(mek.message) === 'ephemeralMessage') ? mek.message.ephemeralMessage.message : mek.message
+if (mek.key && mek.key.remoteJid === 'status@broadcast' && config.AUTO_READ_STATUS === "false"){
+await conn.readMessages([mek.key])
 }
-
-conn.ev.on('call', async (call) => {
-    const callData = call[0]; // Get the first call object
-    if (callData.status === 'offer' && config.ANTICALL === "true") {
-        await conn.sendMessage(callData.from, {
-            text: config.ANTICALL_MSG,
-            mentions: [callData.from],
-        });
-        await conn.rejectCall(callData.id, callData.from);
-    }
-});
-
-
 const m = sms(conn, mek)
 const type = getContentType(mek.message)
 const content = JSON.stringify(mek.message)
@@ -147,6 +122,7 @@ const participants = isGroup ? await groupMetadata.participants : ''
 const groupAdmins = isGroup ? await getGroupAdmins(participants) : ''
 const isBotAdmins = isGroup ? groupAdmins.includes(botNumber2) : false
 const isAdmins = isGroup ? groupAdmins.includes(sender) : false
+const isReact = m.message.reactionMessage ? true : false
 const reply = (teks) => {
 conn.sendMessage(from, { text: teks }, { quoted: mek })
 }
@@ -172,9 +148,10 @@ conn.sendFileUrl = async (jid, url, caption, quoted, options = {}) => {
                 return conn.sendMessage(jid, { audio: await getBuffer(url), caption: caption, mimetype: 'audio/mpeg', ...options }, { quoted: quoted, ...options })
               }
             }
-  
 
-//===================WORKTYPE===============================
+//===========================
+  
+//======================WORKTYPE===============================
 if(!isOwner && config.MODE === "private") return
 if(!isOwner && isGroup && config.MODE === "inbox") return
 if(!isOwner && isGroup && config.MODE === "groups") return
@@ -198,25 +175,25 @@ console.error("[PLUGIN ERROR] " + e);
 }
 events.commands.map(async(command) => {
 if (body && command.on === "body") {
-command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
 } else if (mek.q && command.on === "text") {
-command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
 } else if (
 (command.on === "image" || command.on === "photo") &&
 mek.type === "imageMessage"
 ) {
-command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
 } else if (
 command.on === "sticker" &&
 mek.type === "stickerMessage"
 ) {
-command.function(conn, mek, m,{from, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
+command.function(conn, mek, m,{from, l, quoted, body, isCmd, command, args, q, isGroup, sender, senderNumber, botNumber2, botNumber, pushname, isMe, isOwner, groupMetadata, groupName, participants, groupAdmins, isBotAdmins, isAdmins, reply})
 }});
 
 })
 }
 app.get("/", (req, res) => {
-res.send("Hey,Platinum-v2 started✅");
+res.send("PLANTINIUM_V2");
 });
 app.listen(port, () => console.log(`Server listening on port http://localhost:${port}`));
 setTimeout(() => {
