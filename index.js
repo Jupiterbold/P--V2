@@ -4,8 +4,7 @@
 //  @project_name : PLANTINIUM_V2  
 //  @author       : efeurhobo bullish
 //  ⚠️ DO NOT MODIFY THIS FILE ⚠️  
-//---------------------------------------------------------------------------        console.error("Error processing status actions:", error);
-
+//--------------------------------------------------------------------------- 
 const {
   default: makeWASocket,
   useMultiFileAuthState,
@@ -22,7 +21,7 @@ const P = require('pino');
 const config = require('./config');
 const qrcode = require('qrcode-terminal');
 const util = require('util');
-const { sms, downloadMediaMessage } = require('./libfunctions/msg');
+const { sms, downloadMediaMessage } = require('./lib/functions/msg');
 const axios = require('axios');
 const { File } = require('megajs');
 const prefix = config.PREFIX;
@@ -159,7 +158,7 @@ if(!isOwner && isGroup && config.MODE === "groups") return
 
 
         
-const events = require('./command')
+const events = require('./commands')
 const cmdName = isCmd ? body.slice(1).trim().split(" ")[0].toLowerCase() : false;
 if (isCmd) {
 const cmd = events.commands.find((cmd) => cmd.pattern === (cmdName)) || events.commands.find((cmd) => cmd.alias && cmd.alias.includes(cmdName))
